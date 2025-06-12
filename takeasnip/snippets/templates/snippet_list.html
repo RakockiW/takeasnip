@@ -1,0 +1,10 @@
+<h1>Snippets</h1>
+<a href="{% url 'snippet_create' %}">Add new snippet</a>
+<ul>
+    {% for snippet in snippets %}
+    <li>
+        <a href="{% url 'snippet_detail' snippet.pk %}">{{ snippet.title }}</a>
+        - {{ snippet.category }} - {{ snippet.technology }}
+    </li>
+    {% endfor %}
+</ul>

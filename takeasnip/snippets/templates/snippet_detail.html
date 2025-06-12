@@ -1,0 +1,24 @@
+<h1>{{ snippet.title }}</h1>
+<p><strong>Category:</strong> {{ snippet.category }}</p>
+<p><strong>Technology:</strong> {{ snippet.technology }}</p>
+<pre>{{ snippet.code }}</pre>
+
+<h1>Comments</h1>
+{% if comments %}
+<ul>
+    {% for comment in comments %}
+    <li>{{ comment.content }} - {{ comment.author }} - {{ comment.created_at }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No comments yet.</p>
+{% endif %}
+
+<h2>Add Comment</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+
+<a href="{% url 'snippet_list' %}">← Go back</a>
