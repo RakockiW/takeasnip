@@ -1,5 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
+from takeasnip import settings
 from .forms import SnippetForm, CommentForm
 from .models import Snippet, Comment
 
@@ -32,6 +34,7 @@ def snippet_detail(request, pk):
         'comments': comments,
         'comment_form': comment_form,})
 
+@login_required
 def snippet_create(request):
     if request.method == 'POST':
         form = SnippetForm(request.POST)

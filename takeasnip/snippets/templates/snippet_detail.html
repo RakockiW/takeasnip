@@ -15,10 +15,14 @@
 {% endif %}
 
 <h2>Add Comment</h2>
+{% if user.is_authenticated %}
 <form method="POST">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <button type="submit">Submit</button>
 </form>
+{% else %}
+<p>You must be logged to add comment!</p>
+{% endif %}
 
 <a href="{% url 'snippet_list' %}">← Go back</a>
