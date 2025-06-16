@@ -43,7 +43,7 @@ def user_profile(request):
     profile = request.user.profile
     username = user.username
     xp = profile.xp
-    rank = profile.rank
+    rank = profile.get_rank_display()
     snippets = Snippet.objects.filter(author=user.id)
 
     context = {

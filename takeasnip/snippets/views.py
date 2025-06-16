@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from takeasnip import settings
 from .forms import SnippetForm, CommentForm
-from .models import Snippet, Comment
+from .models import Snippet, Comment, Vote
 
 
 # Create your views here.
@@ -17,6 +17,8 @@ def snippet_list(request):
 def snippet_detail(request, pk):
     snippet = get_object_or_404(Snippet, pk=pk)
     comments = Comment.objects.filter(snippet=pk).order_by('-created_at')
+    upvotes = snippet.get_votes(1)
+    downvotes = snippet.get_votes(-1)
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
@@ -32,7 +34,27 @@ def snippet_detail(request, pk):
     return render(request, 'snippet_detail.html', {
         'snippet': snippet,
         'comments': comments,
-        'comment_form': comment_form,})
+        'comment_form': comment_form,
+        'upvotes': upvotes,
+        'downvotes': downvotes,}
+        )
+
+@login_required
+def vote_snippet(request, pk):
+    snippet = get_object_or_404(Snippet, pk=pk)
+
+    existing_vote = Vote.objects.filter(user=request.user, snippet=snippet)
+
+    if not existing_vote and request.method == 'POST':
+        value = request.POST.get('vote')
+        if value in ['1', '-1']:
+            Vote.objects.create(
+                user=request.user,
+                snippet=snippet,
+                value=value
+            )
+    return redirect('snippet_detail', pk=snippet.pk)
+
 
 @login_required
 def snippet_create(request):
@@ -47,3 +69,12 @@ def snippet_create(request):
         form = SnippetForm()
 
     return render(request, 'snippet_form.html', {'form': form})
+
+def snippet_delete(request, pk):
+    snippet = get_object_or_404(Snippet, pk=pk)
+    user = request.user
+
+    if request.method == 'POST' and snippet.author == user:
+        snippet.delete()
+
+    return redirect('snippet_list')

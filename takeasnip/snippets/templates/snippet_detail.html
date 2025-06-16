@@ -3,6 +3,24 @@
 <p><strong>Technology:</strong> {{ snippet.technology }}</p>
 <pre>{{ snippet.code }}</pre>
 
+{% if user.is_authenticated %}
+    <form method="POST" action="{% url 'vote_snippet' pk=snippet.pk %}">
+        {% csrf_token %}
+        <p>{{ upvotes }}</p>
+        <button type="submit" name="vote" value="1">Upvote</button>
+        <p>{{ downvotes }}</p>
+        <button type="submit" name="vote" value="-1">Downvote</button>
+    </form>
+
+    {% if user == snippet.author %}
+        <form method="POST" action="{% url 'snippet_delete' pk=snippet.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="delete">Delete</button>
+        </form>
+    {% endif %}
+{% endif %}
+
+
 <h1>Comments</h1>
 {% if comments %}
 <ul>
