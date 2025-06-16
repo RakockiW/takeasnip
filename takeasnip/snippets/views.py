@@ -78,3 +78,15 @@ def snippet_delete(request, pk):
         snippet.delete()
 
     return redirect('snippet_list')
+
+def snippet_edit(request, pk):
+    snippet = get_object_or_404(Snippet, pk=pk)
+    if request.method == 'POST':
+        form = SnippetForm(request.POST, instance=snippet)
+        if form.is_valid():
+            form.save()
+            return redirect('snippet_detail', pk=snippet.pk)
+    else:
+        form = SnippetForm(instance=snippet)
+
+    return render(request, 'snippet_form.html', {'form': form})
