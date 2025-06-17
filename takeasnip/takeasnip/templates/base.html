@@ -6,6 +6,7 @@
     <title>{% block title %}TakeASnip{% endblock %}</title>
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-zinc-900  text-gray-100 font-mono min-h-screen flex flex-col">
     <header class="bg-zinc-800 py-4 px-6 flex justify-between items-center">
@@ -28,7 +29,9 @@
         {% endif %}
     </div>
     </header>
-
+    <div id="ascii-bot" class="fixed bottom-10 right-10 transform -translate-y-1/2 z-0 text-green-400 font-mono opacity-20 px-2 pointer-events-none">
+      <pre id="ascii-bot-frame" class="whitespace-pre leading-none text-[8rem]"></pre>
+    </div>
     <main class="p-6 flex-grow">
         {% block content %}{% endblock %}
     </main>
@@ -43,5 +46,17 @@
       </div>
     </footer>
     {% block extra_js %} {% endblock %}
+    <script>
+      const frames = [
+    `(•_•)\n<)   )╯\n/   \\ `,
+    `( •_•)>⌐■-■\n<)   )╯\n/   \\ `,
+    `(⌐■_■)\n<)   )╯\n/   \\ `
+      ];
+      let i = 0;
+      setInterval(() => {
+        document.getElementById("ascii-bot-frame").innerText = frames[i % frames.length];
+        i++;
+      }, 900);
+    </script>
 </body>
 </html>

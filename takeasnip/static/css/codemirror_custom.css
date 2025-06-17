@@ -48,6 +48,7 @@
   border: 2px solid white;
   border-radius: 0.5rem;
   background-color: #18181b; /* ciemne tło pasujące do reszty */
+  height: auto;
 }
 
 /* Przykład dla custom-theme jeśli definiujesz w CSS */

@@ -3,66 +3,117 @@
 {% block title %}{{ snippet.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ snippet.title }}</h1>
-<p><strong>Category:</strong> {{ snippet.category }}</p>
-<p><strong>Technology:</strong> {{ snippet.technology }}</p>
-<pre>{{ snippet.code }}</pre>
+<div class="bg-zinc-900 w-max px-4 py-4 rounded-lg border border-transparent mb-4 hover:border-white transition duration-300">
+<p class="text-2xl text-white mb-4"><span class="text-green-400">// </span>{{ snippet.title }}</p>
+<p class="mb-4 w-200"><span class="text-green-400">{</span></p>
+    <p class="text-white mb-4 w-200 bg-zinc-900 rounded-lg px-4 py-2 border border-transparent hover:border-white transition duration-300">
+        <span class="text-green-400">category:</span> {{ snippet.category }}</p>
+    <p class="text-white mb-4 w-200 bg-zinc-900 rounded-lg px-4 py-2 border border-transparent hover:border-white transition-colors duration-300">
+        <span class="text-green-400">technology:</span> {{ snippet.technology }}</p>
+<p class="text-white mb-4 w-200 bg-zinc-900 rounded-lg px-4 py-2 border border-transparent hover:border-white transition-colors duration-300">
+    <span class="text-green-400">author:</span> {{ snippet.author }}</p>
+<p class="text-white mb-4 w-200 bg-zinc-900 rounded-lg px-4 py-2 border border-transparent hover:border-white transition-colors duration-300">
+    <span class="text-green-400">created:</span> {{ snippet.created_at }}</p>
+<p class="mb-4 w-200"><span class="text-green-400">}</span></p>
+</div>
+
+{% if user.is_authenticated %}
+    {% if user == snippet.author or user.is_superuser %}
+        <div class="flex items-center space-x-4 w-full">
+        <form method="POST" action="{% url 'snippet_delete' pk=snippet.pk %}">
+            {% csrf_token %}
+            <button class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 mb-1" type="submit" name="delete">delete<span class="text-green-400">()</span></button>
+        </form>
+        <a class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 mb-1" href="{% url 'snippet_edit' pk=snippet.pk %}">edit<span class="text-green-400">()</span></a>
+        </div>
+    {% endif %}
+{% endif %}
+
+<textarea id="snippet-code" style="display:none;">{{ snippet.code|escape }}</textarea>
+<div id="code-display-container" class="mt-4 max-w-4xl overflow-auto mb-4"></div>
+
 
 {% if user.is_authenticated %}
     <form method="POST" action="{% url 'vote_snippet' pk=snippet.pk %}">
         {% csrf_token %}
-        <p>{{ snippet.get_upvotes }}</p>
-        <button type="submit" name="vote" value="1">Upvote</button>
-        <p>{{ snippet.get_downvotes }}</p>
-        <button type="submit" name="vote" value="-1">Downvote</button>
+        <div class="flex items-center space-x-4 w-full">
+            <button class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 mb-4" type="submit" name="vote" value="1"><i class="fas fa-plus text-green-400 e"></i><span> {{ snippet.get_upvotes }}</span></button>
+            <button class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 ml-2 mb-4" type="submit" name="vote" value="-1"><i class="fas fa-minus text-red-500"></i><span> {{ snippet.get_downvotes }}</span></button>
+        </div>
     </form>
 
-    {% if user == snippet.author or user.is_superuser %}
-        <form method="POST" action="{% url 'snippet_delete' pk=snippet.pk %}">
-            {% csrf_token %}
-            <button type="submit" name="delete">Delete</button>
-        </form>
-        <a href="{% url 'snippet_edit' pk=snippet.pk %}">Edit</a>
-    {% endif %}
 {% endif %}
 
-
-<h1>Comments</h1>
+<p class="text-2xl text-white mb-4"><span class="text-green-400">// </span>comments</p>
 {% if comments %}
-<ul>
     {% for comment in comments %}
-    <li>{{ comment.content }} - {{ comment.author }} - {{ comment.created_at }}</li>
+        <div class="border border-transparent w-max px-2 py-2 mb-4 bg-zinc-900 rounded-lg p-4 shadow hover:border-white transition-colors duration-300">
+            <p class="text-xl px-2 py-2 border border-transparent hover:border-white rounded-lg transition"><span class="text-green-400">~$ </span>{{ comment.author }}</p>
+            <p class="px-2 py-2 mb-2 text-sm text-gray-400">{{ comment.created_at }}</p>
+            <p class="text-white px-2 py-2">{{ comment.content }}</p>
+
         {% if user.is_authenticated %}
             <form method="POST" action="{% url 'vote_comment' pk=comment.pk %}">
                 {% csrf_token %}
-                <p>{{ comment.get_upvotes }}</p>
-                <button type="submit" name="vote" value="1">Upvote</button>
-                <p>{{ comment.get_downvotes}}</p>
-                <button type="submit" name="vote" value="-1">Downvote</button>
+                <div class="flex items-center space-x-4 w-full">
+                <button class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 mb-4" type="submit" name="vote" value="1"><i class="fas fa-plus text-green-400"></i><span> {{ comment.get_upvotes }}</span></button>
+                <button class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 mb-4" type="submit" name="vote" value="-1"><i class="fas fa-minus text-red-500"></i><span> {{ comment.get_downvotes }}</span></button>
+                </div>
             </form>
 
             {% if user == comment.author or user.is_superuser %}
                 <form method="POST" action="{% url 'comment_delete' pk=comment.pk %}">
                     {% csrf_token %}
-                    <button type="submit" name="delete">Delete</button>
+                    <button class="border border-transparent hover:border-white rounded-lg transition px-2 py-2 mb-4" type="submit" name="delete">delete<span class="text-green-400">()</span></button>
                 </form>
             {% endif %}
         {% endif %}
+        </div>
     {% endfor %}
-</ul>
 {% else %}
 <p>No comments yet.</p>
 {% endif %}
 
-<h2>Add Comment</h2>
+
+<p class="text-2xl text-white mb-4">add_comment<span class="text-green-400">()</span></p>
 {% if user.is_authenticated %}
-<form method="POST">
+<form class="space-y-6 bg-zinc-900 p-6 rounded-lg shadow max-w-xl border border-white hover:border-green-400 transition" method="POST">
     {% csrf_token %}
     {{ comment_form.as_p }}
-    <button type="submit">Submit</button>
+    <button class="bg-zinc-900 border border-white hover:border-green-400 text-white font-bold py-2 px-4 rounded transition-colors duration-200" type="submit">submit<span class="text-green-400">()</span></button>
 </form>
 {% else %}
 <p>You must be logged to add comment!</p>
 {% endif %}
 
+{% endblock %}
+
+{% block extra_js %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/codemirror_custom.css' %}" />
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Wyświetlanie kodu w readonly mode
+        var codeText = document.getElementById("snippet-code");
+        if (codeText) {
+            CodeMirror(function(elt) {
+            document.getElementById("code-display-container").appendChild(elt);
+          }, {
+            value: codeText.value,
+            lineNumbers: true,
+            mode: "python",  // Możesz zmieniać w zależności od snippet.technology
+            theme: "custom-theme",
+            readOnly: true,
+            lineWrapping: true,
+          });
+        }
+      });
+
+  </script>
 {% endblock %}
