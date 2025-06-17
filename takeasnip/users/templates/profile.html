@@ -3,18 +3,28 @@
 {% block title %}{{ username }}{% endblock %}
 
 {% block content %}
+    <div class="bg-zinc-800 w-max px-4 py-4 rounded-lg border border-white mb-4">
+    <p class="text-2xl text-white mb-4 w-max">get_bio()</p>
+    <p class="text-2xl text-white mb-4 w-max bg-zinc-900 rounded-lg px-4 py-2 border border-white">~$ {{ username }}</p>
+    <p class="text-white mb-4 w-max bg-zinc-900 rounded-lg px-4 py-2 border border-white">Rank: {{ rank }}</p>
+    <p class="text-white mb-4 w-max bg-zinc-900 rounded-lg px-4 py-2 border border-white">Experience: {{ xp }}</p>
+    </div>
+    <div class="bg-zinc-800 w-max px-4 py-4 rounded-lg border border-white">
+        <p class="text-2xl text-white mb-4">get_user_snippets()</p>
+        <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6">
+        {% for snippet in snippets %}
+            <div class="border border-white bg-zinc-900 rounded-lg p-4 shadow hover:bg-zinc-800 transition duration-300">
+            <a href="{% url 'snippet_detail'  snippet.pk %}" class="block">
+                <h2 class="text-lg font-semibold text-white mb-2">
+                    <span class="text-green-400">//</span> {{ snippet.title }}
+                </h2>
+                <p class="text-sm text-gray-400">{ {{ snippet.technology }} | {{ snippet.category }} }</p>
+                <p class ="mt-2 text-white ">⬆{{ snippet.get_upvotes }} | ⬇{{ snippet.get_downvotes }} | 🗨️{{ snippet.get_total_comments }}</p>
 
-<h1>{{ username }}</h1>
-<h2>Rank: {{ rank }}</h2>
-<h3>Experience: {{ xp }}</h3>
-
-<ul>
-    {% for snippet in snippets %}
-        <li>
-        {{ snippet.title }}
-        </li>
-
-    {% endfor %}
-</ul>
+            </a>
+            </div>
+            {% endfor %}
+    </div>
+    </div>
 
 {% endblock %}
