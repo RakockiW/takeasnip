@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ snippet.title }}{% endblock %}
+
+{% block content %}
 <h1>{{ snippet.title }}</h1>
 <p><strong>Category:</strong> {{ snippet.category }}</p>
 <p><strong>Technology:</strong> {{ snippet.technology }}</p>
@@ -6,17 +11,18 @@
 {% if user.is_authenticated %}
     <form method="POST" action="{% url 'vote_snippet' pk=snippet.pk %}">
         {% csrf_token %}
-        <p>{{ upvotes }}</p>
+        <p>{{ snippet.get_upvotes }}</p>
         <button type="submit" name="vote" value="1">Upvote</button>
-        <p>{{ downvotes }}</p>
+        <p>{{ snippet.get_downvotes }}</p>
         <button type="submit" name="vote" value="-1">Downvote</button>
     </form>
 
-    {% if user == snippet.author %}
+    {% if user == snippet.author or user.is_superuser %}
         <form method="POST" action="{% url 'snippet_delete' pk=snippet.pk %}">
             {% csrf_token %}
             <button type="submit" name="delete">Delete</button>
         </form>
+        <a href="{% url 'snippet_edit' pk=snippet.pk %}">Edit</a>
     {% endif %}
 {% endif %}
 
@@ -26,6 +32,22 @@
 <ul>
     {% for comment in comments %}
     <li>{{ comment.content }} - {{ comment.author }} - {{ comment.created_at }}</li>
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'vote_comment' pk=comment.pk %}">
+                {% csrf_token %}
+                <p>{{ comment.get_upvotes }}</p>
+                <button type="submit" name="vote" value="1">Upvote</button>
+                <p>{{ comment.get_downvotes}}</p>
+                <button type="submit" name="vote" value="-1">Downvote</button>
+            </form>
+
+            {% if user == comment.author or user.is_superuser %}
+                <form method="POST" action="{% url 'comment_delete' pk=comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" name="delete">Delete</button>
+                </form>
+            {% endif %}
+        {% endif %}
     {% endfor %}
 </ul>
 {% else %}
@@ -43,4 +65,4 @@
 <p>You must be logged to add comment!</p>
 {% endif %}
 
-<a href="{% url 'snippet_list' %}">← Go back</a>
+{% endblock %}

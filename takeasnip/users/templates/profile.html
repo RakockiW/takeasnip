@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ username }}{% endblock %}
+
+{% block content %}
+
 <h1>{{ username }}</h1>
 <h2>Rank: {{ rank }}</h2>
 <h3>Experience: {{ xp }}</h3>
@@ -11,4 +17,4 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'snippet_list' %}">← Go back</a>
+{% endblock %}

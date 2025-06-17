@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}TakeASnip{% endblock %}</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+</head>
+<body class="bg-zinc-900  text-gray-100 font-mono min-h-screen">
+    <header class="bg-zinc-800 py-4 px-6 flex justify-between items-center">
+    <nav class="space-x-4">
+        <a href="{% url 'snippet_list' %}" class="hover:text-green-400">snippets()</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'snippet_create' %}" class="hover:text-green-400">add_snippet()</a>
+            {% if user.is_superuser %}
+            <a href="/admin/" class="hover:text-green-400">admin_panel()</a>
+            {% endif %}
+            <a href="{% url 'logout' %}" class="hover:text-red-400">logout()</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="hover:text-green-400">login()</a>
+            <a href="{% url 'register' %}" class="hover:text-green-400">register()</a>
+        {% endif %}
+    </nav>
+    <div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="text-sm hover:text-green-400" >~$ {{ user.username }}</a>
+        {% endif %}
+    </div>
+    </header>
+
+    <main class="p-6">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,7 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}New Snippet{% endblock %}
+
+{% block content %}
+
 <h1>New Snippet</h1>
+
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Submit</button>
 </form>
-<a href="{% url 'snippet_list' %}">← Go back</a>
+
+{% endblock %}

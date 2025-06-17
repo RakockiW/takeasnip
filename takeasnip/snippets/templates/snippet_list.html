@@ -1,21 +1,46 @@
-{% if user.is_authenticated %}
-    <p>Hello, <a href="{% url 'profile' %}">{{ user.username }}!</a></p>
-    <a href="{% url 'logout' %}">Logout</a>
-    {% if user.is_superuser %}
-        <a href="/admin/">Admin Panel</a>
-    {% endif %}
-{% else %}
-    <a href="{% url 'login' %}">Login</a>
-    <a href="{% url 'register' %}">Register</a>
-{% endif %}
+{% extends 'base.html' %}
 
-<h1>Snippets</h1>
-<a href="{% url 'snippet_create' %}">Add new snippet</a>
-<ul>
-    {% for snippet in snippets %}
-    <li>
-        <a href="{% url 'snippet_detail' snippet.pk %}">{{ snippet.title }}</a>
-        - {{ snippet.category }} - {{ snippet.technology }}
-    </li>
-    {% endfor %}
-</ul>
+{% block title %}Snippets{% endblock %}
+
+{% block content %}
+
+    <form method="get">
+        <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+
+        <select name="category">
+            <option value="">All categories</option>
+            {% for category in categories %}
+                <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+                    {{ category }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="technology">
+            <option value="">All technologies</option>
+            {% for technology in technologies %}
+                <option value="{{ technology }}" {% if technology == selected_technology %}selected{% endif %}>
+                    {{ technology }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Search</button>
+        <a href="{% url 'snippet_list' %}">Reset</a>
+    </form>
+    <h1 class="text-2xl text-green-400 mb-4">// snippet list</h1>
+    <ul class="space-y-2">
+        {% for snippet in snippets %}
+        <li class="bg-zinc-800 p-4 rounded-lg hover:bg-zinc-700">
+            <a class="block" href="{% url 'snippet_detail' snippet.pk %}">
+                <span class="text-green-500">➜</span>
+                <span class="text-white">{{ snippet.title }}</span>
+                <span class="text-green-400">// {{ snippet.category }} | {{ snippet.technology }}</span>
+            </a>
+        </li>
+        {% empty %}
+            <li class="text-green-400">// No snippets found.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

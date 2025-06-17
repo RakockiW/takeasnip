@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
 <h2>Register</h2>
 
 {% if form.errors %}
@@ -16,4 +22,4 @@
     <button type="submit">Submit</button>
 </form>
 
-<a href="{% url 'snippet_list' %}">← Go back</a>
+{% endblock %}
