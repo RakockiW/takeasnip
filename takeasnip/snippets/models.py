@@ -20,6 +20,12 @@ class Snippet(models.Model):
     def get_downvotes(self):
         return VoteSnippet.objects.filter(snippet=self, value=-1).count()
 
+    def get_total_votes(self):
+        return VoteSnippet.objects.filter(snippet=self).count()
+
+    def get_total_comments(self):
+        return Comment.objects.filter(snippet=self).count()
+
 class Comment(models.Model):
     snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE)
     content = models.TextField()
