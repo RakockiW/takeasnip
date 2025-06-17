@@ -4,12 +4,66 @@
 
 {% block content %}
 
-<h1>New Snippet</h1>
+    <p class="text-2xl text-white mb-4">add_snippet<span class="text-green-400">()</span></p>
 
-<form method="POST">
+<form method="POST" class="space-y-6 bg-zinc-900 p-6 rounded-lg shadow max-w-xl border border-transparent hover:border-white transition">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
+
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block mb-1 text-sm font-semibold text-white">
+          {{ field.label }}
+          {% if field.field.required %}
+            <span class="text-red-500">*</span>
+          {% endif %}
+        </label>
+        {{ field }}
+        {% if field.help_text %}
+          <p class="text-xs text-gray-400 mt-1">{{ field.help_text }}</p>
+        {% endif %}
+        {% for error in field.errors %}
+          <p class="text-red-500 text-xs mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <button type="submit"
+      class="bg-zinc-900 border border-white hover:border-green-400 text-white font-bold py-2 px-4 rounded transition-colors duration-200">
+      submit<span class="text-green-400">()</span>
+    </button>
 </form>
 
 {% endblock %}
+
+{% block extra_js %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/codemirror_custom.css' %}" />
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var textarea = document.querySelector("textarea[name='code']");
+      if (!textarea) return;
+
+      var editor = CodeMirror.fromTextArea(textarea, {
+        lineNumbers: true,
+        mode: "python",
+        theme: "custom-theme",
+        indentUnit: 4,
+        tabSize: 4,
+        indentWithTabs: true,
+        lineWrapping: true,
+        autofocus: true,
+      });
+
+      textarea.form.addEventListener('submit', function() {
+        textarea.value = editor.getValue();
+      });
+    });
+  </script>
+{% endblock %}
+

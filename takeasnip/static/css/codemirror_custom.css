@@ -1,0 +1,57 @@
+.cm-s-custom-theme.CodeMirror {
+  background: #18181b;   /* bg-zinc-900 */
+  color: #d4d4d8;        /* jasny tekst */
+}
+
+.cm-s-custom-theme .CodeMirror-cursor {
+  border-left: 2px solid #4ade80; /* zielony kursor */
+}
+
+.cm-s-custom-theme .CodeMirror-gutters {
+  background: #18181b;
+  border-right: 1px solid #3f3f46;
+  color: #6b7280; /* szary kolor linii */
+}
+
+.cm-s-custom-theme .cm-keyword {
+  color: #4ade80; /* zielony */
+  font-weight: 600;
+}
+
+.cm-s-custom-theme .cm-comment {
+  color: #4ade80; /* zielony ciemniejszy */
+  font-style: italic;
+}
+
+.cm-s-custom-theme .cm-string {
+  color: #4ade80; /* trochę jaśniejszy zielony */
+}
+
+.cm-s-custom-theme .cm-number {
+  color: #4ade80;
+}
+
+.cm-s-custom-theme .cm-variable {
+  color: #d4d4d8;
+}
+
+.cm-s-custom-theme .cm-def {
+  color: #4ade80;
+}
+
+.cm-s-custom-theme .cm-error {
+  background-color: #dc2626;
+  color: white;
+}
+
+.CodeMirror {
+  border: 2px solid white;
+  border-radius: 0.5rem;
+  background-color: #18181b; /* ciemne tło pasujące do reszty */
+}
+
+/* Przykład dla custom-theme jeśli definiujesz w CSS */
+.cm-s-custom-theme.CodeMirror {
+  background-color: #18181b;
+  color: #f8f8f2;
+}

@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, query
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 
 from takeasnip import settings
 from .forms import SnippetForm, CommentForm
@@ -11,17 +13,17 @@ from .models import Snippet, Comment, VoteSnippet, VoteComment
 
 # Returns snippets list
 def snippet_list(request):
-    query = request.GET.get('q')
-    category_filter = request.GET.get('category')
-    technology_filter = request.GET.get('technology')
+    query = request.GET.get("q", "")
+    category = request.GET.get("category", "")
+    technology = request.GET.get("technology", "")
 
     snippets = Snippet.objects.all()
 
-    if category_filter:
-        snippets = snippets.filter(category__iexact=category_filter)
+    if category:
+        snippets = snippets.filter(category__iexact=category)
 
-    if technology_filter:
-        snippets = snippets.filter(technology__iexact=technology_filter)
+    if technology:
+        snippets = snippets.filter(technology__iexact=technology)
 
     if query:
         snippets = snippets.filter(
@@ -32,20 +34,27 @@ def snippet_list(request):
         )
 
 
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string("partials/snippet_cards_list.html", {"snippets": snippets})
+        return HttpResponse(html)
+
+
     categories = Snippet.objects.values_list(
         'category', flat=True).distinct()
 
     technologies = Snippet.objects.values_list(
         'technology', flat=True).distinct()
 
+
+    snippets = snippets.distinct()
     snippets = snippets.order_by('-created_at')
 
     return render(request, 'snippet_list.html', {
         'snippets': snippets,
         'categories': categories,
-        'selected_category': category_filter,
+        'selected_category': category,
         'technologies': technologies,
-        'selected_technology': technology_filter,
+        'selected_technology': technology,
     })
 
 # Returns details of snippet

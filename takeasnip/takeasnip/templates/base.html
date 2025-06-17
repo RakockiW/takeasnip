@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <title>{% block title %}TakeASnip{% endblock %}</title>
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
 </head>
-<body class="bg-zinc-900  text-gray-100 font-mono min-h-screen">
+<body class="bg-zinc-900  text-gray-100 font-mono min-h-screen flex flex-col">
     <header class="bg-zinc-800 py-4 px-6 flex justify-between items-center">
     <nav class="space-x-4">
         <a href="{% url 'snippet_list' %}" class="hover:text-green-400">snippets()</a>
@@ -28,8 +29,19 @@
     </div>
     </header>
 
-    <main class="p-6">
+    <main class="p-6 flex-grow">
         {% block content %}{% endblock %}
     </main>
+    <footer class="bg-zinc-900 text-zinc-400 py-6 mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center">
+        <p class="text-sm">&copy; 2025 TakeASnip. All rights reserved.</p>
+        <div class="mt-4 sm:mt-0 space-x-4">
+          <a href="#" class="hover:text-white transition-colors text-sm">Contact</a>
+            <a href="#" class="hover:text-white transition-colors text-sm">Terms Of Service</a>
+            <a href="#" class="hover:text-white transition-colors text-sm">GitHub</a>
+        </div>
+      </div>
+    </footer>
+    {% block extra_js %} {% endblock %}
 </body>
 </html>

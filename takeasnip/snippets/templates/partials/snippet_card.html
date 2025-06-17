@@ -1,0 +1,12 @@
+
+<div class="border border-transparent bg-zinc-900 rounded-lg p-4 shadow hover:border-white transition-colors duration-300">
+<a href="{% url 'snippet_detail'  snippet.pk %}" class="block">
+    <p class="text-lg font-semibold text-white mb-2">
+        <span class="text-green-400">//</span> {{ snippet.title }}
+    </p>
+    <p class="text-sm text-gray-400">{ {{ snippet.technology }} | {{ snippet.category }} }</p>
+    <p class="mt-2 text-gray-400 text-xs">{{ snippet.author }}</p>
+    <p class ="mt-2 text-white ">⬆{{ snippet.get_upvotes }} | ⬇{{ snippet.get_downvotes }} | 🗨️{{ snippet.get_total_comments }}</p>
+
+</a>
+</div>
