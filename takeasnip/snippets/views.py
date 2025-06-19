@@ -113,7 +113,7 @@ def snippet_delete(request, pk):
     snippet = get_object_or_404(Snippet, pk=pk)
     user = request.user
 
-    if request.method == 'POST' and snippet.author == user:
+    if request.method == 'POST' and (snippet.author == user or user.is_superuser):
         snippet.delete()
 
     return redirect('snippet_list')
@@ -121,12 +121,12 @@ def snippet_delete(request, pk):
 def snippet_edit(request, pk):
 
     snippet = get_object_or_404(Snippet, pk=pk)
-
+    author = snippet.author
     form = SnippetForm(request.POST or None, instance=snippet)
 
     if form.is_valid():
         snippet = form.save(commit=False)
-        snippet.author = request.user
+        snippet.author = author
         snippet.save()
         return redirect('snippet_detail', pk=snippet.pk)
 
@@ -157,7 +157,7 @@ def vote_comment(request, pk):
 def comment_delete(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
-    if request.method == 'POST' and request.user == comment.author:
+    if request.method == 'POST' and (request.user == comment.author or request.user.is_superuser):
         comment.delete()
 
     return redirect('snippet_detail', pk=comment.snippet.pk)

@@ -25,12 +25,12 @@
     </nav>
     <div>
         {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}" class="text-sm hover:text-green-400" >~$ {{ user.username }}</a>
+        <a href="{% url 'profile' user %}" class="text-sm hover:text-green-400" >~$ {{ user.username }}</a>
         {% endif %}
     </div>
     </header>
     <div id="ascii-bot" class="fixed bottom-10 right-10 transform -translate-y-1/2 z-0 text-green-400 font-mono opacity-20 px-2 pointer-events-none">
-      <pre id="ascii-bot-frame" class="whitespace-pre leading-none text-[8rem]"></pre>
+      <pre id="ascii-bot-frame" class="whitespace-pre leading-none text-[4rem]"></pre>
     </div>
     <main class="p-6 flex-grow">
         {% block content %}{% endblock %}

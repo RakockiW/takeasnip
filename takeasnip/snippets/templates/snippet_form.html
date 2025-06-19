@@ -5,14 +5,15 @@
 {% block content %}
 
 <p class="text-2xl text-white mb-4">add_snippet<span class="text-green-400">()</span></p>
-
 <form method="POST" class="space-y-6 bg-zinc-900 p-6 rounded-lg shadow max-w-xl border border-transparent hover:border-white transition">
+    <p class="mb-4 w-200"><span class="text-green-400 text-2xl">{</span></p>
+
     {% csrf_token %}
 
     {% for field in form %}
       <div>
         <label for="{{ field.id_for_label }}" class="block mb-1 text-sm font-semibold text-white">
-          {{ field.label }}
+          {{ field.label }}:
           {% if field.field.required %}
             <span class="text-red-500">*</span>
           {% endif %}
@@ -31,7 +32,9 @@
       class="bg-zinc-900 border border-white hover:border-green-400 text-white font-bold py-2 px-4 rounded transition-colors duration-200">
       submit<span class="text-green-400">()</span>
     </button>
+    <p class="mb-4 w-200"><span class="text-green-400 text-2xl">}</span></p>
 </form>
+
 
 {% endblock %}
 

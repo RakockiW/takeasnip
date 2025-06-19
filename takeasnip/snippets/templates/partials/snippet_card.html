@@ -5,7 +5,7 @@
         <span class="text-green-400">//</span> {{ snippet.title }}
     </p>
     <p class="text-sm text-gray-400">{ {{ snippet.technology }} | {{ snippet.category }} }</p>
-    <p class="mt-2 text-gray-400 text-xs">{{ snippet.author }}</p>
+    <a href="{% url 'profile' snippet.author %}" class="mt-2 text-gray-400 text-xs">{{ snippet.author }}</a>
     <p class ="mt-2 text-white ">
         <i class="fas fa-plus text-green-400"></i>
         <span> {{ snippet.get_upvotes }}</span> |
