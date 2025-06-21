@@ -30,6 +30,6 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         widgets = {
             'content': forms.Textarea(attrs={
-                'class': 'bg-zinc-900 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400 border border-transparent hover:border-white transition'
+                'class': 'w-full bg-zinc-900 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400 border border-transparent hover:border-white transition'
             })
         }

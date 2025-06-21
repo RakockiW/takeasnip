@@ -99,7 +99,6 @@
 
   <script>
       document.addEventListener("DOMContentLoaded", function() {
-        // Wyświetlanie kodu w readonly mode
         var codeText = document.getElementById("snippet-code");
         if (codeText) {
             CodeMirror(function(elt) {
@@ -107,7 +106,7 @@
           }, {
             value: codeText.value,
             lineNumbers: true,
-            mode: "python",  // Możesz zmieniać w zależności od snippet.technology
+            mode: "python",
             theme: "custom-theme",
             readOnly: true,
             lineWrapping: true,
